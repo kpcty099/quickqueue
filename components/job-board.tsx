@@ -11,7 +11,8 @@ import {
   X
 } from "lucide-react";
 import { JobCard } from "@/components/job-card";
-import { AdUnit } from "@/components/ad-unit";
+import { AdSlot } from "@/components/ads/AdSlot";
+import { interleaveAds } from "@/lib/ads/utils";
 import { categoryFilters, tagFilters, type Job } from "@/data/jobs";
 
 type JobBoardProps = {
@@ -104,6 +105,15 @@ export function JobBoard({ jobs }: JobBoardProps) {
       return matchesFilter && matchesSearch;
     });
   }, [activeFilter, jobs, query, savedJobs]);
+
+  // Interleave ads into the visible jobs list
+  const feedWithAds = useMemo(() => {
+    return interleaveAds(visibleJobs, {
+      firstAdIndex: 2, // First ad after 2nd job
+      frequency: 6,    // Every 6 jobs thereafter
+      maxAds: 50       // Scalable limit
+    });
+  }, [visibleJobs]);
 
   function toggleSavedJob(title: string) {
     setSavedJobs((currentJobs) =>
@@ -239,7 +249,11 @@ export function JobBoard({ jobs }: JobBoardProps) {
           </div>
         </div>
       </section>
-      <AdUnit slot="1234567890" format="horizontal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" />
+
+      {/* Strategic Hero Ad */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <AdSlot placement="HOME_HERO_TOP_01" lazy={false} />
+      </div>
 
       <section id="jobs" className="relative mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -254,22 +268,29 @@ export function JobBoard({ jobs }: JobBoardProps) {
           </p>
         </div>
 
-        {visibleJobs.length > 0 ? (
+        {feedWithAds.length > 0 ? (
           <div className="grid gap-5">
-            {visibleJobs.map((job, index) => (
-              <div key={job.title}>
+            {feedWithAds.map((item, index) => {
+              if ('isAd' in item) {
+                return (
+                  <AdSlot 
+                    key={`ad-${index}`} 
+                    placement={item.slotId} 
+                    className="my-4"
+                  />
+                );
+              }
+              
+              return (
                 <JobCard
-                  job={job}
+                  key={item.title}
+                  job={item}
                   index={index}
-                  isSaved={savedJobs.includes(job.title)}
+                  isSaved={savedJobs.includes(item.title)}
                   onToggleSaved={toggleSavedJob}
                 />
-                {/* Inject an ad every 5 jobs */}
-                {(index + 1) % 5 === 0 && (
-                  <AdUnit slot="5678901234" format="horizontal" className="mt-5" />
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="rounded-lg border border-line bg-slate-950/72 p-8 text-center">
@@ -287,7 +308,11 @@ export function JobBoard({ jobs }: JobBoardProps) {
           </div>
         )}
       </section>
-      <AdUnit slot="9876543210" format="auto" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10" />
+
+      {/* Footer Ad Spot */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <AdSlot placement="FOOTER_GRID_01" />
+      </div>
 
       <footer className="border-t border-line bg-slate-950/90 px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
