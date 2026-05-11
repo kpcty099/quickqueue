@@ -36,17 +36,6 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         {children}
-        <div className="flex justify-center my-8">
-          <ins className="adsbygoogle"
-            style={{ display: "block", minWidth: "300px", minHeight: "100px" }}
-            data-ad-client="ca-pub-4721017051634152"
-            data-ad-slot="1234567890"
-            data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
-        </div>
-        <Script id="adsense-init" strategy="afterInteractive">
-          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-        </Script>
       </body>
     </html>
   );

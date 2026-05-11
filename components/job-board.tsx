@@ -11,6 +11,7 @@ import {
   X
 } from "lucide-react";
 import { JobCard } from "@/components/job-card";
+import { AdUnit } from "@/components/ad-unit";
 import { categoryFilters, tagFilters, type Job } from "@/data/jobs";
 
 type JobBoardProps = {
@@ -238,6 +239,7 @@ export function JobBoard({ jobs }: JobBoardProps) {
           </div>
         </div>
       </section>
+      <AdUnit slot="1234567890" format="horizontal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" />
 
       <section id="jobs" className="relative mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -255,13 +257,18 @@ export function JobBoard({ jobs }: JobBoardProps) {
         {visibleJobs.length > 0 ? (
           <div className="grid gap-5">
             {visibleJobs.map((job, index) => (
-              <JobCard
-                key={job.title}
-                job={job}
-                index={index}
-                isSaved={savedJobs.includes(job.title)}
-                onToggleSaved={toggleSavedJob}
-              />
+              <div key={job.title}>
+                <JobCard
+                  job={job}
+                  index={index}
+                  isSaved={savedJobs.includes(job.title)}
+                  onToggleSaved={toggleSavedJob}
+                />
+                {/* Inject an ad every 5 jobs */}
+                {(index + 1) % 5 === 0 && (
+                  <AdUnit slot="5678901234" format="horizontal" className="mt-5" />
+                )}
+              </div>
             ))}
           </div>
         ) : (
@@ -280,6 +287,7 @@ export function JobBoard({ jobs }: JobBoardProps) {
           </div>
         )}
       </section>
+      <AdUnit slot="9876543210" format="auto" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10" />
 
       <footer className="border-t border-line bg-slate-950/90 px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
