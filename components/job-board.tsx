@@ -320,9 +320,12 @@ export function JobBoard({ jobs }: JobBoardProps) {
             <p className="font-semibold text-white">Remote AI Jobs</p>
             <p className="mt-1">Curated remote AI and expert data opportunities.</p>
           </div>
-          <div className="flex items-center gap-2 text-slate-300">
-            <BookmarkCheck className="size-4 text-teal-200" aria-hidden="true" />
-            {savedJobs.length} saved
+          <div className="flex items-center gap-6 text-slate-300">
+            <a href="/privacy" className="hover:text-teal-400 transition text-xs font-medium">Privacy Policy</a>
+            <div className="flex items-center gap-2">
+              <BookmarkCheck className="size-4 text-teal-200" aria-hidden="true" />
+              {savedJobs.length} saved
+            </div>
           </div>
         </div>
       </footer>
